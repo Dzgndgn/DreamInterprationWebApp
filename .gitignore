@@ -1,0 +1,29 @@
+# Build ve yayýn klasörleri
+bin/
+obj/
+out/
+*.exe
+*.dll
+*.pdb
+
+# Kullanýcý / IDE dosyalarý
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Geçici dosyalar
+*.log
+*.vspscc
+*.tmp
+
+# Ortam deðiþkenleri
+*.env
+
+# OS dosyalarý
+.DS_Store
+Thumbs.db
+
+Data/

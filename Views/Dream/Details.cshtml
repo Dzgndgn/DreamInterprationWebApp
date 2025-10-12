@@ -1,0 +1,49 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model DreamAI.Models.DreamInterprete
+@{
+
+    ViewData["Title"] = "Yorum";
+    var symbols = System.Text.Json.JsonSerializer.Deserialize<string[]>(Model.SymbolsJson) ?? Array.Empty<string>();
+    var themes = System.Text.Json.JsonSerializer.Deserialize<string[]>(Model.ThemesJson) ?? Array.Empty<string>();
+}
+<h2>Yorum</h2>
+
+<div class="mb-2"><strong>Duygu durumu:</strong> @Model.Emotions</div>
+<div class="mb-2">
+    <strong>Semboller:</strong>
+    @foreach (var s in symbols)
+    {
+        <span class="badge bg-secondary me-1">@s</span>
+    }
+</div>
+<div class="mb-2">
+    <strong>Temalar:</strong>
+    @foreach (var t in themes)
+    {
+        <span class="badge bg-info me-1">@t</span>
+    }
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Yorum Metni</div>
+    <div class="card-body"><p>@Model.FullText</p></div>
+</div>
+
+<div class="card">
+    <div class="card-header">Öneriler</div>
+    <div class="card-body">
+        @foreach (var line in Model.Advices.Split('\n'))
+        {
+            if (!string.IsNullOrWhiteSpace(line))
+            {
+                <div>• @line</div>
+                ;
+            }
+        }
+        <div class="text-muted mt-2">⚠️ Tıbbi/psikolojik tavsiye değildir.</div>
+    </div>
+</div>
