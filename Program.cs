@@ -28,12 +28,21 @@ builder.Services.AddScoped<ReadFromData>();
 
 // Servislerini kaydet
 builder.Services.AddScoped<Interpretaion>();
+builder.Services.AddScoped<OldMessages>();
 builder.Services.AddControllersWithViews();
 
 // Add services to the container.
 //builder.Services.AddRazorPages();
 builder.Services.AddDbContext<DreamDbContext>(options => options.UseSqlServer("Server = localhost; Database = DreamAI; Trusted_Connection = True; TrustServerCertificate = True;"));
-builder.Services.AddIdentity<User, IdentityRole<Guid>>().AddEntityFrameworkStores<DreamDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
+{
+    options.Password.RequiredLength = 8;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireDigit = true;
+    options.User.AllowedUserNameCharacters = "abcçdefgðhiýjklmnoöpqrsþtuüvwxyzABCÇDEFGÐHIÝJKLMNOÖPQRSÞTUÜVWXYZ0123456789-";
+})
+    .AddEntityFrameworkStores<DreamDbContext>().AddDefaultTokenProviders().AddUserValidator<UserValidate>().AddPasswordValidator<PasswordValidate>();
 var app = builder.Build();
 using(var scope = app.Services.CreateScope())
 {
@@ -52,12 +61,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Dream}/{action=New}/{id?}"
+    pattern: "{controller=Login}/{action=Login}/{id?}"
     );
 //app.MapRazorPages();
 
